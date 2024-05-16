@@ -1,0 +1,15 @@
+Завдання:
+
+В класі login_page.py написати 2 тести (створити нові тестові методи):
+Test 1
+- Open page https://practicetestautomation.com/practice-test-login/
+ER: Verify that url don't contain “logged-in-successfully” (use driver.current_url method)
+
+Test 2
+- Open page https://practicetestautomation.com/practice-test-login/
+- Fill in the username and password with correct values (username: “student”, password: “Password123”)
+- Click on Submit button
+- Click on Logout button
+
+ER: Verify that you are logged out and url don't contain "https://practicetestautomation.com/logged-in-successfully/"
+(use driver.current_url method)
