@@ -1,43 +1,39 @@
+import unittest
+from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from pages.logged_in_successfully_page import LoggedInSuccessPage
-from pages.base_page import BasePage
+
+class TestLoginPage(unittest.TestCase):
+
+    def setUp(self):
+        self.driver = webdriver.Chrome()
+        self.driver.maximize_window()
+
+    def tearDown(self):
+        self.driver.quit()
+
+    def test_url_not_contains_logged_in_successfully(self):
+        self.driver.get("https://practicetestautomation.com/practice-test-login/")
+        current_url = self.driver.current_url
+        self.assertNotIn("logged-in-successfully", current_url, "URL contains 'logged-in-successfully'")
+
+    def test_login_and_logout(self):
+        self.driver.get("https://practicetestautomation.com/practice-test-login/")
+        username_field = self.driver.find_element(By.ID, "username")
+        password_field = self.driver.find_element(By.ID, "password")
+        submit_button = self.driver.find_element(By.ID, "submit")
+
+        username_field.send_keys("student")
+        password_field.send_keys("Password123")
+
+        submit_button.click()
+
+        logout_button = self.driver.find_element(By.ID, "logout")
+        logout_button.click()
+
+        current_url = self.driver.current_url
+        self.assertNotIn("logged-in-successfully", current_url, "URL contains 'logged-in-successfully'")
 
 
-# Class LoginPage inherits from BasePage
-# and contains locators and methods for the login page
-# representation of https://practicetestautomation.com/practice-test-login/
-
-class LoginPage(BasePage):
-    def __init__(self, driver):
-        # Викликаємо конструктор базового класу BasePage через super() і передаємо йому драйвер
-        # (об'єкт WebDriver який потім буде використовуватися в методах класу)
-        super().__init__(driver)
-
-    # локатори елементів сторінки логіну
-    search_field = (By.XPATH, "//*[@id='search2']")
-    user_name_field = (By.ID, "username")
-    password_field = (By.ID, "password")
-    submit_button = (By.ID, "submit")
-    username_invalid_text = (By.ID, "error")
-    title_text = (By.XPATH, "//h2")
-    login_url = "https://practicetestautomation.com/practice-test-login/"
-
-    def enterUserCred(self, username, password):
-        self.enter_text(self.user_name_field, username)
-        self.enter_text(self.password_field, password)
-        return self
-
-    def open_login_page(self):
-        self.open_page(self.login_url)
-        return self
-
-    def clickOnSubmit(self):
-        self.click_on_web_element(self.submit_button)
-        return LoggedInSuccessPage(self.driver)
-
-    def get_username_invalid_text(self):
-        return self.get_element_text(self.username_invalid_text)
-
-    def get_title_login_text(self) -> str:
-        return self.get_element_text(self.title_text)
+if __name__ == "__main__":
+    unittest.main()
